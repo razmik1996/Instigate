@@ -6,14 +6,20 @@ import signal
 import sys
 import pyperclip                                                         #for copy to clipboard
 
-#SIGINT signal handling function
 def signal_handler(sig, frame):
-        print('\nYou pressed Ctrl+C!')
-        print("Bye!!!")
-        sys.exit(0)
+    """
+    SIGINT signal handling function
+    """
+    print('\nYou pressed Ctrl+C!')
+    print("Bye!!!")
+    sys.exit(0)
 
-def main(): 
+def main():
+    """
+    Main function
+    """
     signal.signal(signal.SIGINT, signal_handler)                         #handling SIGINT
+    print "For more information please read readme file"
     print "Type exit if you want exit"
     upper = string.ascii_uppercase                                       #string with uppercase
     lower = string.ascii_lowercase                                       #string with lowercase
@@ -23,7 +29,12 @@ def main():
         password = ""
         print "--------------------------------"
         print "How strong password do you want?"
-        passwordLvl = raw_input("e for easy, m for middle, h for hard: ")
+        try: 
+            passwordLvl = raw_input("e for easy, m for middle, h for hard: ")#try block for catching ctr+d
+        except EOFError as error:
+            print "\nYou pressed ctr+d"
+            print "Bye"
+            exit(1)
         if(passwordLvl == "exit"):
             print "Bye!!!"
             exit(0)
@@ -39,8 +50,11 @@ def main():
         print "Your password is: ", password
         print ("Password copied to clipboard!!!")
 
-#this function generate easy password using lower case letters and digits
 def easyPassword(digits, lower):
+    """
+    this function generate easy password using
+    lower case letters and digits
+    """
     pwd = ""
     string = digits + lower
     while True:
@@ -62,9 +76,13 @@ def easyPassword(digits, lower):
             continue
     return pwd
 
-#this function generate middle password using digits lower and upper case letters
 def midlePassword(digits, lower, upper):
+    """
+    this function generate middle password 
+    using digits lower and upper case letters
+    """
     pwd = ""
+    lenght = 0
     string = digits + lower + upper
     while True:
         count = raw_input("How many characters do you want?(6 to 40): ")
@@ -77,10 +95,16 @@ def midlePassword(digits, lower, upper):
                 print("Invalid number please enter number between 6 to 40: ")
                 continue
             else:
-                pwd = ''.join(random.choice(string) for _ in range(count-3))
-                #at least one lower and upper case letter, digit
-                pwd += random.choice(digits) + random.choice(lower) + random.choice(upper)
-                #shuffle
+                while(lenght != count):
+                    if(lenght % 3 == 0):
+                        lenght += 1
+                        pwd += random.choice(digits)
+                    elif(lenght % 3 == 1):
+                        lenght += 1
+                        pwd += random.choice(lower)
+                    elif(lenght % 3 == 2):
+                        lenght += 1
+                        pwd += random.choice(upper)
                 pwd = ''.join(random.sample(pwd, count))
                 pyperclip.copy(pwd)
                 break
@@ -89,11 +113,13 @@ def midlePassword(digits, lower, upper):
             continue
     return pwd
 
-#this function generate hard password using digits, lower and upper case letters, symbols
 def hardPassword(digits, lower, upper, symbol):
+    """
+    this function generate hard password using digits,
+    lower and upper case letters, symbols
+    """
     pwd = ""
-    string = digits + lower + upper + symbol
-    print string
+    lenght = 0
     while True:
         count = raw_input("How many characters do you want?(8 to 50): ")
         if (count == "exit"):
@@ -105,10 +131,19 @@ def hardPassword(digits, lower, upper, symbol):
                 print("Invalid number please enter number between 8 to 50: ")
                 continue
             else:
-                pwd = ''.join(random.choice(string) for _ in range(count))
-                #at least one lower and upper case letter, digit, symbol
-                pwd += random.choice(digits) + random.choice(lower) + random.choice(upper) + random.choice(symbol) 
-                #shuffle
+                while(lenght != count):
+                    if(lenght % 4 == 0):
+                        lenght += 1
+                        pwd += random.choice(digits)
+                    elif(lenght % 4 == 1):
+                        lenght += 1
+                        pwd += random.choice(lower)
+                    elif(lenght % 4 == 2):
+                        lenght += 1
+                        pwd += random.choice(upper)
+                    elif(lenght % 4 == 3):
+                        lenght += 1
+                        pwd += random.choice(symbol)
                 pwd = ''.join(random.sample(pwd, count))
                 pyperclip.copy(pwd)
                 break
