@@ -4,17 +4,22 @@ import re
 import signal
 import sys
 
-#SIGINT signal handling function
 def signal_handler(sig, frame):
-        print('\nYou pressed Ctrl+C!')
-        print("Bye!!!")
-        sys.exit(0)
+    """
+    SIGINT signal handling function
+    """
+    print('\nYou pressed Ctrl+C!')
+    print("Bye!!!")
+    sys.exit(0)
 
 def main():
-    signal.signal(signal.SIGINT, signal_handler) #handling SIGINT
+    """
+    Main function
+    """
+    signal.signal(signal.SIGINT, signal_handler)                                    #handling SIGINT
+    print "Please read readme file for more information"
     print "Type exit if you want exit"
     while True:
-        print"______________________________"
         password = readPassword()
         passStrongest = passwordCheck(password)                                     #Strongest value
         print "Strongest value is: ", passStrongest
@@ -27,21 +32,31 @@ def main():
         else:
             print "it's impossible)) who are you?"
 
-#read password from user
 def readPassword():
+    """
+    read password from user
+    """
     while True:
-        password = raw_input("Enter your password for checking (length between 4 to 50): ")
+        try:
+            print"------------------------------------------------------------------------"
+            password = raw_input("Enter your password for checking (length between 4 to 50): ") #try block for catching ctr+d 
+        except EOFError as error:
+            print "\nYou pressed ctr+d"
+            print "Bye"
+            exit(1)
         if (password == "exit"):
-    	    print "Good Bye!!!"
-    	    exit()
+            print "Good Bye!!!"
+            exit()
         elif (len(password) < 4 or len(password) > 50):
-    	    print("Invalid length of password please retry ")
-    	    continue
+            print("Invalid length of password please retry ")
+            continue
         else:
             return password
 
-#check Strongest of password
 def passwordCheck(password):
+    """
+    check Strongest of password
+    """
     passStrongest = 0
     passStrongest += len(password)
     if(re.search(r'\d', password)):
