@@ -5,31 +5,36 @@ from random import randint
 import signal
 import sys
 
-#SIGINT signal handling fuction
 def signal_handler(sig, frame):
-        print('\nYou pressed Ctrl+C!')
-        print("Bye!!!")
-        sys.exit(0)
+    """
+    SIGINT signal handling function 
+    """
+    print('\nYou pressed Ctrl+C!')
+    print("Bye!!!")
+    sys.exit(0)
 
-#Main function
 def main():
-    signal.signal(signal.SIGINT, signal_handler) #handling SIGINT
-    print "Welcome to the Cows and Bulls Game!" #Welcome text
-    randInteger = randint(1000, 9999); #rand four digit integer
-    randList = integerToList(randInteger) #from integer to list
-    global countCows
-    global countBulls
-    print "Write exit if you want exit"
+    """
+    Main function
+    """
+    signal.signal(signal.SIGINT, signal_handler)              #handling SIGINT
+    print "Welcome to the Cows and Bulls Game!"               #Welcome text
+    print "For more information read readme.txt file"
+    randInteger = randint(1000, 9999);                        #rand four digit integer
+    randList = integerToList(randInteger)                     #from integer to list
+    print "Type exit if you want exit"
     while(True):
-        yourNumber = enterYourNumber() #take number from user
-        if (check(yourNumber, randInteger)): #check value is answer or not
+        yourNumber = enterYourNumber()                        #take number from user
+        if (check(yourNumber, randInteger)):                  #check value is answer or not
             return 0
         else:
             print "Your Number is: ", yourNumber
-            howMuchCowsBulls(yourNumber, randList) #count Cows and Bulls
+            howMuchCowsBulls(yourNumber, randList)            #count Cows and Bulls
 
-#function from integer to list
 def integerToList(integer):
+    """
+    function from integer to list
+    """
     listRand = []
     listRand.append(integer/1000);
     listRand.append((integer%1000)/100)
@@ -37,26 +42,36 @@ def integerToList(integer):
     listRand.append(integer%10)
     return listRand
 
-#read input and after validation return it
 def enterYourNumber():
-    yourNumber = raw_input("Enter Your four digit number: ")
+    """
+    read input and after validation return it
+    """
+    try:
+        print"----------------------------------"
+        yourNumber = raw_input("Enter Your four digit number: ")  #try block for catching ctr+d 
+    except EOFError as error:
+        print "\nYou pressed ctr+d"
+        print "Bye"
+        exit(1)
     if (yourNumber == "exit"):
-	print "Good Bye!!!"
-	exit()
-    if (yourNumber.isdigit()):
-	yourNumber = int(yourNumber)
-	if (yourNumber < 1000 or yourNumber > 9999):
-	    print("Invalid number please enter four digit number: ")
-	    yourNumber = enterYourNumber()
+        print "Good Bye!!!"                                       #when user want exit
+        exit(0)
+    if (yourNumber.isdigit()):                                    #when input is number
+        yourNumber = int(yourNumber)
+        if (yourNumber < 1000 or yourNumber > 9999):
+            print("Invalid number please enter four digit number: ")
+            yourNumber = enterYourNumber()
     else:
-	print "Invalid type of number please enter four digit number: "
-	yourNumber = enterYourNumber()
-
+        print "Invalid type of number please enter four digit number: "
+        yourNumber = enterYourNumber()
+    
     return yourNumber
 
 
-#check answer is correct or not
 def check(yourNumber, randInteger):
+    """
+    check answer is correct or not
+    """
     if(yourNumber == randInteger):
         print "Your Number is: ", yourNumber
         print "Awesome random number is: ", randInteger
@@ -64,8 +79,10 @@ def check(yourNumber, randInteger):
     else:
         return False
 
-#how much Cows And Bulls
 def howMuchCowsBulls(yourNumber, listRand):
+    """
+    how much Cows And Bulls
+    """
     countCows = 0                                   #Game Cows and Bulls
     countBulls = 0                                  #For every digit that the user guessed correctly
     customerList = integerToList(yourNumber)        #In the correct place, they have a "cow"
