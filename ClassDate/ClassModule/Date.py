@@ -133,6 +133,11 @@ class Date:
         """
         if(year > 0):
             self.__year += year
+            if (self.__month == 2 and self.__day == 29):
+                if not(((self.__year%4 == 0 and self.__year%100 != 0) or (self.__year%400 == 0))) :
+                    self.__month += 1
+                    self.__day = 1
+                
         else:
             print "invalid quantity of years"
 
@@ -146,6 +151,10 @@ class Date:
             while(self.__month > 12):
                 self.__month -= 12
                 self.__year += 1
+            if (self.__month == 2 and self.__day == 29):
+                if not(((self.__year%4 == 0 and self.__year%100 != 0) or (self.__year%400 == 0))):
+                    self.__month += 1
+                    self.__day = 1
         else:
             print "invalid quantity of months"
 
@@ -164,34 +173,34 @@ class Date:
             diffYear = self.__year - year
             diffMonth = self.__month - month
             if(diffMonth < 0):
-                diffMonth += 11
+                diffMonth += 12
                 diffYear -= 1
             diffDay = self.__day - day
             if(diffDay < 0):
-                diffDay += self.__monthList[diffMonth - 1] - 1
+                diffDay += self.__monthList[diffMonth - 1]
                 diffMonth -= 1
                 if(diffMonth <= 0):
-                    diffMonth += 11
+                    diffMonth += 12
                     diffYear -= 1
         elif(self.__year < year):
             diffYear = year - self.__year
             diffMonth = month - self.__month
             if(diffMonth < 0):
-                diffMonth += 11
+                diffMonth += 12
                 diffYear -= 1
             diffDay = day - self.__day
             if(diffDay < 0):
-                diffDay += monthList[diffMonth - 1] - 1
+                diffDay += monthList[diffMonth - 1]
                 diffMonth -= 1
                 if(diffMonth == 0):
-                    diffMonth += 11
+                    diffMonth += 12
                     diffYear -= 1
         else:
             if(self.__month > month):
                 diffMonth = self.__month - month
                 diffDay = self.__day - day
                 if(diffDay < 0):
-                    diffDay += monthList[diffMonth - 1] - 1
+                    diffDay += monthList[diffMonth - 1]
                     diffMonth -= 1
             elif(self.__month < month):
                 diffMonth = month - self.__month
