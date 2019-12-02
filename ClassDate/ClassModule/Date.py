@@ -190,7 +190,7 @@ class Date:
                 diffYear -= 1
             diffDay = day - self.__day
             if(diffDay < 0):
-                diffDay += monthList[diffMonth - 1]
+                diffDay += self.__monthList[diffMonth - 1]
                 diffMonth -= 1
                 if(diffMonth == 0):
                     diffMonth += 12
@@ -200,13 +200,13 @@ class Date:
                 diffMonth = self.__month - month
                 diffDay = self.__day - day
                 if(diffDay < 0):
-                    diffDay += monthList[diffMonth - 1]
+                    diffDay += self.__monthList[diffMonth - 1]
                     diffMonth -= 1
             elif(self.__month < month):
                 diffMonth = month - self.__month
                 diffDay = day - self.__day
                 if(diffDay < 0):
-                    diffDay += monthList[diffMonth - 1] - 1
+                    diffDay += self.__monthList[diffMonth - 1] - 1
                     diffMonth -= 1
             else:
                 if(self.__day > day):
@@ -218,3 +218,4 @@ class Date:
                     print "first Date == second Date"
                     return
         print "Different is: ", diffYear, "Year ", diffMonth, "Month ", diffDay, "Day"
+        return (diffYear, diffMonth, diffDay)

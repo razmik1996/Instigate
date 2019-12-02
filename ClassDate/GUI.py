@@ -4,7 +4,9 @@ from ClassModule import Date
 
 def output(event):
     dateList = getDates()
-    dateList[0].diff(dateList[1])
+    tupleDiff = dateList[0].diff(dateList[1])
+    label_4 = Label(root, text = (str(tupleDiff[0]) + " year " + str(tupleDiff[1]) + " month " + str(tupleDiff[2]) + " day"))
+    label_4.grid(row = 3, column = 0, columnspan = 2)
     
 def getDates():
     listDates = []
@@ -14,7 +16,7 @@ def getDates():
         p1 = Date.Date(listDate1[0], listDate1[1], listDate1[2])
     else:
         label_3 = Label(root, text = "First input is invalid")
-        label_3.grid(columnspan = 2)
+        label_3.grid(columnspan = 2, row = 3, column = 0)
         return
     listDates.append(p1)
     date2 = entry_2.get()
@@ -23,7 +25,7 @@ def getDates():
         p2 = Date.Date(listDate2[0], listDate2[1], listDate2[2])
     else:
         label_3 = Label(root, text = "Second input is invalid")
-        label_3.grid(columnspan = 2)
+        label_3.grid(columnspan = 2, row = 3, column = 0)
         return
     listDates.append(p2)
     return listDates
