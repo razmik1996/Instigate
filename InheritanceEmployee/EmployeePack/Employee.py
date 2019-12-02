@@ -69,7 +69,7 @@ class Employee:
         """
         Get salary of employer
         """
-        return self.Salary
+        return self.salary
 
     def getEarnings(self):
         """

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from tkinter import *
+from Tkinter import *
 from ClassModule import Date
 
 def output(event):
