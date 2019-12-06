@@ -1,13 +1,15 @@
 SOURCES1 := $(wildcard src/project1/*.cpp)
 SOURCES2 := $(wildcard src/project2/*.cpp)
 OBJECTS1 := $(patsubst src/project1/%.cpp, obj/project1/%.o, $(SOURCES1))
-OBJECTS2 := $(patsubst src/project2/%.cpp, obj/project2/%.o, $(SOURCES2))
-bin/program: ./bin lib/libstatproject.a main.cpp
-	@g++ -static main.cpp -lstatproject -Llib -o bin/program -I src/project1 -I src/project2
+OBJECTS := $(patsubst src/project2/%.cpp, obj/project2/%.o, $(SOURCES2))
+OBJECTS2 := $(patsubst obj/project2/main.o, , $(OBJECTS))
+bin/program: ./bin lib/libstatproject.a src/project2/main.cpp
+	@g++ -static src/project2/main.cpp -lstatproject -Llib -o bin/program -I src/project1 -I src/project2
 	@echo "Succesfully ..."
 ./bin:
 	@mkdir bin
 	@echo "bin directory created ..."
+	@echo $(OBJECTS2)
 lib/libstatproject.a: ./lib $(OBJECTS1) $(OBJECTS2)
 	@ar rc $@ $(OBJECTS1) $(OBJECTS2)
 	@echo "Static library created ..."
@@ -27,7 +29,7 @@ obj/project2/%.o: src/project2/%.cpp src/project2/%.hpp
 	@echo "Project 2 $@ created ..."
 
 .PHONY: shared
-shared: main.cpp lib/libsharedproject.so ./bin
+shared: src/project2/main.cpp lib/libsharedproject.so ./bin
 	@g++ main.cpp -lsharedproject -Llib -o bin/shProgram.out -I src/project1 -I src/project2
 	@echo "Sucesfully with shared library ...."
 
