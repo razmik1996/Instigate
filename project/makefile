@@ -17,10 +17,12 @@ lib/libsharedproject.so: ./lib $(OBJECTS1) $(OBJECTS2)
 ./lib:
 	@mkdir lib
 	@echo "lib directory created ..."
-obj/project1/%.o: src/project1/%.cpp src/project1/%.hpp ./obj ./obj/project1 
+obj/project1/%.o: src/project1/%.cpp src/project1/%.hpp
+	@mkdir -p obj/project1
 	@g++ -c $< -o $@
 	@echo "Project 1 $@ created ..."
-obj/project2/%.o: src/project2/%.cpp src/project2/%.hpp ./obj ./obj/project2
+obj/project2/%.o: src/project2/%.cpp src/project2/%.hpp
+	@mkdir -p obj/project2
 	@g++ -c $< -o $@
 	@echo "Project 2 $@ created ..."
 ./obj:
@@ -39,7 +41,12 @@ shared: main.cpp lib/libsharedproject.so ./bin
 	@export LD_LIBRARY_PATH=../lib
 	@echo "Sucesfully with shared library ...."
 
+.PHONY: clear
+clear:
+	@rm -rf obj bin lib
+	@echo "clearing ......."
+
 .PHONY: clean
 clean:
-	@rm -rf obj bin lib
+	@rm -rf obj
 	@echo "cleaning ......."
