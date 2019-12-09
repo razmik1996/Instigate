@@ -9,7 +9,6 @@ bin/program: ./bin lib/libstatproject.a src/project2/main.cpp
 ./bin:
 	@mkdir bin
 	@echo "bin directory created ..."
-	@echo $(OBJECTS2)
 lib/libstatproject.a: ./lib $(OBJECTS1) $(OBJECTS2)
 	@ar rc $@ $(OBJECTS1) $(OBJECTS2)
 	@echo "Static library created ..."
@@ -30,7 +29,7 @@ obj/project2/%.o: src/project2/%.cpp src/project2/%.hpp
 
 .PHONY: shared
 shared: src/project2/main.cpp lib/libsharedproject.so ./bin
-	@g++ main.cpp -lsharedproject -Llib -o bin/shProgram.out -I src/project1 -I src/project2
+	@g++ src/project2/main.cpp -lsharedproject -Llib -o bin/shProgram.out -I src/project1 -I src/project2
 	@echo "Sucesfully with shared library ...."
 
 .PHONY: clear
