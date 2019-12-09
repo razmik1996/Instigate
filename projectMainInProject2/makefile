@@ -1,5 +1,8 @@
 SOURCES1 := $(wildcard src/project1/*.cpp)
 SOURCES2 := $(wildcard src/project2/*.cpp)
+DEPENDS := $(wildcard src/project1/*.cpp) $(wildcard src/project2/*.cpp)
+DEPENDSO := $(patsubst src/project1/%.cpp, obj/project1/%.dep, $(DEPENDS)) 
+DEPENDSO := $(patsubst src/project2/%.cpp, obj/project2/%.dep, $(DEPENDSO))
 OBJECTS1 := $(patsubst src/project1/%.cpp, obj/project1/%.o, $(SOURCES1))
 OBJECTS := $(patsubst src/project2/%.cpp, obj/project2/%.o, $(SOURCES2))
 OBJECTS2 := $(patsubst obj/project2/main.o, , $(OBJECTS))
@@ -9,6 +12,7 @@ OBJECTS2DEB := $(patsubst obj/project2/maindeb.o, , $(OBJECTSDEB))
 bin/program: ./bin lib/libstatproject.a src/project2/main.cpp
 	@g++ -static src/project2/main.cpp -lstatproject -Llib -o bin/program -I src/project1 -I src/project2
 	@echo "Succesfully ..."
+	@echo $(DEPENDSO)
 ./bin:
 	@mkdir bin
 	@echo "bin directory created ..."
@@ -32,16 +36,20 @@ obj/project2/%deb.o: src/project2/%.cpp src/project2/%.hpp
 	@g++ -g3 -c $< -o $@
 	@echo "Project 2 $@ created ..."
 obj/project1/%.o: src/project1/%.cpp src/project1/%.hpp
-	@mkdir -p obj/project1
 	@g++ -c $< -o $@
 	@echo "Project 1 $@ created ..."
 obj/project2/%.o: src/project2/%.cpp src/project2/%.hpp
-	@mkdir -p obj/project2
 	@g++ -c $< -o $@
 	@echo "Project 2 $@ created ..."
 ./debug:
 	@mkdir debug
 	@echo "debug directory created ......."
+obj/project1/%.dep: src/project1/%.cpp 
+	@mkdir -p obj/project1
+	@g++ -MM $< -MT "$@, $(patsubst %.dep, %.o, $@)" -o $@ -I src/project1 -I src/project2
+obj/project2/%.dep: src/project2/%.cpp
+	@mkdir -p obj/project2
+	@g++ -MM $< -MT "$@, $(patsubst %.dep, %.o, $@)" -o $@ -I src/project1 -I src/project2
 
 .PHONY: shared
 shared: src/project2/main.cpp lib/libsharedproject.so ./bin
@@ -62,3 +70,5 @@ clear:
 debuging: src/project2/main.cpp lib/libdebugproject.a ./debug
 	@g++ -g3 src/project2/main.cpp -ldebugproject -Llib -o debug/debProgram.out -I src/project1 -I src/project2
 	@echo "Debug file created see in debug directory ..."
+
+-include $(DEPENDSO)
